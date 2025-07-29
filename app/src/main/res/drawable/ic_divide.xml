@@ -1,0 +1,33 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="960"
+    android:viewportHeight="960"
+    android:tint="@android:color/darker_gray"
+    android:autoMirrored="true">
+
+    <!-- Círculo superior -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M480,240
+                          m-80,0
+                          a80,80 0 1,0 160,0
+                          a80,80 0 1,0 -160,0" />
+
+    <!-- Linha horizontal -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M240,460
+                          L720,460
+                          L720,500
+                          L240,500
+                          Z" />
+
+    <!-- Círculo inferior -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M480,720
+                          m-80,0
+                          a80,80 0 1,0 160,0
+                          a80,80 0 1,0 -160,0" />
+</vector>
