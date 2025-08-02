@@ -64,3 +64,5 @@ Feel free to fork this project and open PRs! Contributions are welcome ❤️
 ## 📄 License
 
 MIT License © 2025 [Haruka Yamamoto](https://github.com/HarukaYamamoto0)
+
+<a href="https://www.flaticon.com/free-icons/calculator" title="calculator icons">Calculator icons created by Pixel perfect - Flaticon</a>

@@ -61,7 +61,10 @@ fun MainScreen(
                 .padding(16.dp)
         ) {
             Text(
-                text = state.calculation,
+                text = state.calculation
+                     .replace('/', '÷')
+                     .replace('*', '×')
+                ,
                 modifier = Modifier
                     .weight(8f)
                     .fillMaxWidth(),
@@ -136,7 +139,7 @@ fun MainScreen(
                     modifier = Modifier.weight(1f),
                     key = "()",
                     color = Color(0xff3b4a40),
-                    onClick = { viewModel.validateInput("(") })
+                    onClick = { viewModel.onParenthesisClick() })
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     icon = R.drawable.percent,

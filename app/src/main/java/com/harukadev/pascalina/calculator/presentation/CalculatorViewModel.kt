@@ -13,13 +13,66 @@ class CalculatorViewModel() : ViewModel() {
     val state: StateFlow<CalculatorState> = _state.asStateFlow()
 
     fun validateInput(input: String) {
+        val current = state.value.calculation
+
+        val lastChar = current.lastOrNull()
+        val isOperator = { c: Char -> c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == ',' }
+
+        // Avoid starting with an operator (except "-")
+        if (current.isEmpty() && isOperator(input.first()) && input != "-") return
+
+        // Avoid two operators in a row
+        if (lastChar != null && isOperator(lastChar) && isOperator(input.first())) return
+
+        // Avoid multiple stitches in a row or multiple stitches in the same number
+        if (input == ",") {
+            val lastNumber = current.takeLastWhile { it.isDigit() || it == ',' }
+            if (lastNumber.contains(',')) return
+            if (lastChar == null || !lastChar.isDigit()) return
+        }
+
+        // Avoid starting with multiple zeros without a period
+        if (input == "0") {
+            val lastNumber = current.takeLastWhile { it.isDigit() }
+            if (lastNumber == "0") return
+        }
+
+        // If it passed the validations, update the calculation
         _state.update { currentState ->
             currentState.copy(
                 calculation = currentState.calculation + input
             )
         }
+
         calculate()
     }
+
+    fun onParenthesisClick() {
+        val current = state.value.calculation
+        val openCount = current.count { it == '(' }
+        val closeCount = current.count { it == ')' }
+        val lastChar = current.lastOrNull()
+
+        val shouldInsertOpen = when {
+            // If there is nothing yet, start with (
+            current.isEmpty() -> true
+
+            // If the last character is an operator or a (
+            lastChar != null && (lastChar in "+-*/(") -> true
+
+            // If there is more ) than (, add (
+            openCount <= closeCount -> true
+
+            // Otherwise, it closes)
+            else -> false
+        }
+
+        val updated = current + if (shouldInsertOpen) "(" else ")"
+
+        _state.update { it.copy(calculation = updated) }
+        calculate()
+    }
+
 
     fun clear() {
         _state.update { it -> it.copy(calculation = "", calculationResult = "0") }
