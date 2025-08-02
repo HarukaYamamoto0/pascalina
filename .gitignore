@@ -13,6 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+.idea/appInsightsSettings.xml
 
 # Compiled class file
 *.class
