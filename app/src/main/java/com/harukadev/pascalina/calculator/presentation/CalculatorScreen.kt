@@ -1,5 +1,6 @@
 package com.harukadev.pascalina.calculator.presentation
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -37,9 +39,10 @@ import com.harukadev.pascalina.ui.theme.PascalinaTheme
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    viewModel: CalculatorViewModel = viewModel()
+    viewModel: CalculatorViewModel = viewModel(factory = CalculatorViewModel.Factory)
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -60,11 +63,11 @@ fun MainScreen(
                 .background(Color(0xff2b352e))
                 .padding(16.dp)
         ) {
+            // TODO: make the expression and result selectable for copying
             Text(
-                text = state.calculation
-                     .replace('/', '÷')
-                     .replace('*', '×')
-                ,
+                text = state.expression
+                    .replace('/', '÷')
+                    .replace('*', '×'),
                 modifier = Modifier
                     .weight(8f)
                     .fillMaxWidth(),
@@ -134,22 +137,23 @@ fun MainScreen(
                     modifier = Modifier.weight(1f),
                     key = "AC",
                     color = Color(0xff2d4b58),
-                    onClick = { viewModel.clear() })
+                    onClick = { viewModel.onClearKey() }
+                )
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     key = "()",
                     color = Color(0xff3b4a40),
-                    onClick = { viewModel.onParenthesisClick() })
+                    onClick = { viewModel.onParenthesisKey() })
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     icon = R.drawable.percent,
                     color = Color(0xff3b4a40),
-                    onClick = { viewModel.validateInput("%") })
+                    onClick = { viewModel.appendOperator('%') })
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     icon = R.drawable.ic_divide,
                     color = Color(0xff3b4a40),
-                    onClick = { viewModel.validateInput("/") })
+                    onClick = { viewModel.appendOperator('/') })
             }
 
             Row(
@@ -162,20 +166,20 @@ fun MainScreen(
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     key = "7",
-                    onClick = { viewModel.validateInput("7") })
+                    onClick = { viewModel.appendNumber(7) })
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     key = "8",
-                    onClick = { viewModel.validateInput("8") })
+                    onClick = { viewModel.appendNumber(8) })
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     key = "9",
-                    onClick = { viewModel.validateInput("9") })
+                    onClick = { viewModel.appendNumber(9) })
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     icon = R.drawable.close,
                     color = Color(0xff3b4a40),
-                    onClick = { viewModel.validateInput("*") })
+                    onClick = { viewModel.appendOperator('*') })
             }
 
             Row(
@@ -188,20 +192,20 @@ fun MainScreen(
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     key = "4",
-                    onClick = { viewModel.validateInput("4") })
+                    onClick = { viewModel.appendNumber(4) })
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     key = "5",
-                    onClick = { viewModel.validateInput("5") })
+                    onClick = { viewModel.appendNumber(5) })
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     key = "6",
-                    onClick = { viewModel.validateInput("6") })
+                    onClick = { viewModel.appendNumber(6) })
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     icon = R.drawable.horizontal,
                     color = Color(0xff3b4a40),
-                    onClick = { viewModel.validateInput("-") })
+                    onClick = { viewModel.appendOperator('-') })
             }
 
             Row(
@@ -214,20 +218,20 @@ fun MainScreen(
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     key = "1",
-                    onClick = { viewModel.validateInput("1") })
+                    onClick = { viewModel.appendNumber(1) })
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     key = "2",
-                    onClick = { viewModel.validateInput("2") })
+                    onClick = { viewModel.appendNumber(2) })
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     key = "3",
-                    onClick = { viewModel.validateInput("3") })
+                    onClick = { viewModel.appendNumber(3) })
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     icon = R.drawable.sum,
                     color = Color(0xff3b4a40),
-                    onClick = { viewModel.validateInput("+") })
+                    onClick = { viewModel.appendOperator('+') })
             }
 
             Row(
@@ -240,21 +244,27 @@ fun MainScreen(
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     key = "0",
-                    onClick = { viewModel.validateInput("0") },
+                    onClick = { viewModel.appendNumber(0) },
                 )
                 ButtonKey(
                     modifier = Modifier.weight(1f),
-                    key = ",",
-                    onClick = { viewModel.validateInput(",") })
+                    key = ".",
+                    onClick = { viewModel.appendOperator('.') })
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     icon = R.drawable.backspace,
-                    onClick = { viewModel.backspace() })
+                    onClick = { viewModel.onBackspaceKey() })
                 ButtonKey(
                     modifier = Modifier.weight(1f),
                     icon = R.drawable.equal,
                     color = Color(0xff215135),
-                    onClick = { viewModel.calculate() })
+                    onClick = {
+                        Toast.makeText(
+                            context,
+                            "This button is just for decoration",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    })
             }
         }
     }
