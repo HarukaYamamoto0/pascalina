@@ -2,6 +2,8 @@
 
 **Pascalina** is a clean, minimal calculator app built with **Jetpack Compose**. Inspired by the first mechanical calculator in history, Pascalina is modern, lightweight, and ready to be extended.
 
+> It's a study project.
+
 ## ✨ Features
 
 - 🧮 Supports basic math expressions: `+`, `-`, `*`, `/`, `()`
